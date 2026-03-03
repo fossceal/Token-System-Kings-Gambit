@@ -63,3 +63,7 @@ def create_team(team: TeamCreate, db: Session = Depends(get_db)):
         "name": new_team.name,
         "credits": new_team.credits
     }
+@app.get("/teams")
+def get_all_teams(db: Session = Depends(get_db)):
+    teams = db.query(models.Team).all()
+    return teams
