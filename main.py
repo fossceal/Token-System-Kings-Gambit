@@ -67,3 +67,36 @@ def create_team(team: TeamCreate, db: Session = Depends(get_db)):
 def get_all_teams(db: Session = Depends(get_db)):
     teams = db.query(models.Team).all()
     return teams
+
+
+# -----------------------
+# Audience Schema
+# -----------------------
+class AudienceCreate(BaseModel):
+    name: str
+    branch: str
+    year: int
+
+
+# -----------------------
+# Create Audience API
+# -----------------------
+@app.post("/audience")
+def create_audience(audience: AudienceCreate, db: Session = Depends(get_db)):
+
+    new_audience = models.Audience(
+        name=audience.name,
+        branch=audience.branch,
+        year=audience.year,
+        credits=0
+    )
+
+    db.add(new_audience)
+    db.commit()
+    db.refresh(new_audience)
+
+    return {
+        "id": new_audience.id,
+        "name": new_audience.name,
+        "credits": new_audience.credits
+    }
