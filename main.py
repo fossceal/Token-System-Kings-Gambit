@@ -173,3 +173,16 @@ def reward_team(request: RewardRequest, db: Session = Depends(get_db)):
         "team": team.name,
         "new_balance": team.credits
     }
+# -----------------------
+# Leaderboard API
+# -----------------------
+@app.get("/leaderboard")
+def leaderboard(db: Session = Depends(get_db)):
+    
+    teams = (
+        db.query(models.Team)
+        .order_by(models.Team.credits.desc())
+        .all()
+    )
+
+    return teams
