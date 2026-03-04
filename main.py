@@ -144,3 +144,32 @@ def transfer_tokens(request: TransferRequest, db: Session = Depends(get_db)):
         "team_balance": team.credits,
         "audience_balance": audience.credits
     }
+# -----------------------
+# Reward Schema
+# -----------------------
+class RewardRequest(BaseModel):
+    team_id: int
+    amount: int
+# -----------------------
+# Reward Team API
+# -----------------------
+@app.post("/reward")
+def reward_team(request: RewardRequest, db: Session = Depends(get_db)):
+
+    team = db.query(models.Team).filter(models.Team.id == request.team_id).first()
+
+    if not team:
+        return {"error": "Team not found"}
+
+    if request.amount <= 0:
+        return {"error": "Reward amount must be positive"}
+
+    team.credits += request.amount
+
+    db.commit()
+
+    return {
+        "message": "Reward added",
+        "team": team.name,
+        "new_balance": team.credits
+    }
