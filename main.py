@@ -100,3 +100,47 @@ def create_audience(audience: AudienceCreate, db: Session = Depends(get_db)):
         "name": new_audience.name,
         "credits": new_audience.credits
     }
+# -----------------------
+# Transfer Schema
+# -----------------------
+class TransferRequest(BaseModel):
+    team_id: int
+    audience_id: int
+    amount: int
+# -----------------------
+# Transfer Tokens API
+# -----------------------
+@app.post("/transfer")
+def transfer_tokens(request: TransferRequest, db: Session = Depends(get_db)):
+
+    # Find team
+    team = db.query(models.Team).filter(models.Team.id == request.team_id).first()
+
+    # Find audience
+    audience = db.query(models.Audience).filter(models.Audience.id == request.audience_id).first()
+
+    if not team:
+        return {"error": "Team not found"}
+
+    if not audience:
+        return {"error": "Audience not found"}
+
+    if request.amount <= 0:
+        return {"error": "Transfer amount must be positive"}
+
+    if team.credits < request.amount:
+        return {"error": "Insufficient team credits"}
+
+    # Deduct tokens from team
+    team.credits -= request.amount
+
+    # Add tokens to audience
+    audience.credits += request.amount
+
+    db.commit()
+
+    return {
+        "message": "Transfer successful",
+        "team_balance": team.credits,
+        "audience_balance": audience.credits
+    }
