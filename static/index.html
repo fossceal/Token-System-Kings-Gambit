@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>King's Gambit — Token System</title>
+    <meta name="description"
+        content="Token transfer system for King's Gambit quiz competition. Manage teams, audience, and token flows in real time." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Orbitron:wght@500;700;900&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+
+    <!-- ═══ HERO ═══ -->
+    <header id="hero">
+        <div class="hero-glow"></div>
+        <h1 class="hero-title">
+            <i class="fa-solid fa-chess-king crown"></i> King's Gambit
+        </h1>
+        <p class="hero-subtitle">Token System — Quiz Competition</p>
+    </header>
+
+    <!-- ═══ MAIN GRID ═══ -->
+    <main id="dashboard">
+
+        <!-- TEAMS PANEL -->
+        <section class="card" id="teams-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-users text-gold"></i> Teams</h2>
+                <span class="badge" id="team-count">0</span>
+            </div>
+            <ul class="entity-list" id="teams-list"></ul>
+            <form class="inline-form" id="add-team-form">
+                <h3>Register Team</h3>
+                <div class="form-row">
+                    <input type="text" id="team-name" placeholder="Team Name" required />
+                    <input type="text" id="team-branch" placeholder="Branch" required />
+                </div>
+                <div class="form-row">
+                    <input type="number" id="team-year" placeholder="Year" min="1" max="6" required />
+                    <input type="number" id="team-credits" placeholder="Initial Credits" min="0" required />
+                </div>
+                <button type="submit" class="btn btn-gold"><i class="fa-solid fa-plus"></i> Add Team</button>
+            </form>
+        </section>
+
+        <!-- AUDIENCE PANEL -->
+        <section class="card" id="audience-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-users-viewfinder text-cyan"></i> Audience</h2>
+                <span class="badge" id="audience-count">0</span>
+            </div>
+            <ul class="entity-list" id="audience-list"></ul>
+            <form class="inline-form" id="add-audience-form">
+                <h3>Register Audience</h3>
+                <div class="form-row">
+                    <input type="text" id="audience-name" placeholder="Name" required />
+                    <input type="text" id="audience-branch" placeholder="Branch" required />
+                </div>
+                <div class="form-row">
+                    <input type="number" id="audience-year" placeholder="Year" min="1" max="6" required />
+                </div>
+                <button type="submit" class="btn btn-cyan"><i class="fa-solid fa-plus"></i> Add Audience</button>
+            </form>
+        </section>
+
+        <!-- TRANSFER PANEL -->
+        <section class="card card-wide" id="transfer-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-money-bill-transfer text-gold"></i> Transfer Tokens</h2>
+            </div>
+            <p class="card-description">Move tokens from a team to an audience member as a quiz reward.</p>
+            <form class="inline-form" id="transfer-form">
+                <div class="form-row form-row-three">
+                    <select id="transfer-team" required>
+                        <option value="" disabled selected>Select Team</option>
+                    </select>
+                    <div class="transfer-arrow"><i class="fa-solid fa-arrow-right"></i></div>
+                    <select id="transfer-audience" required>
+                        <option value="" disabled selected>Select Audience</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <input type="number" id="transfer-amount" placeholder="Amount" min="1" required />
+                    <button type="submit" class="btn btn-gold">Transfer</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- REWARD PANEL -->
+        <section class="card" id="reward-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-award text-emerald"></i> Reward Team</h2>
+            </div>
+            <p class="card-description">Grant bonus tokens to a team for correct answers.</p>
+            <form class="inline-form" id="reward-form">
+                <div class="form-row">
+                    <select id="reward-team" required>
+                        <option value="" disabled selected>Select Team</option>
+                    </select>
+                    <input type="number" id="reward-amount" placeholder="Amount" min="1" required />
+                </div>
+                <button type="submit" class="btn btn-emerald"><i class="fa-solid fa-gift"></i> Reward</button>
+            </form>
+        </section>
+
+        <!-- LEADERBOARD PANEL -->
+        <section class="card card-wide" id="leaderboard-panel">
+            <div class="card-header">
+                <h2><i class="fa-solid fa-chart-column text-gold"></i> Leaderboard</h2>
+                <span class="live-badge">● LIVE</span>
+            </div>
+            <div id="leaderboard-container"></div>
+        </section>
+
+    </main>
+
+    <!-- ═══ TOAST ═══ -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

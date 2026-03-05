@@ -1,15 +1,29 @@
 print("MAIN FILE LOADED")
 
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from database import engine, Base, SessionLocal
 import models
+import os
 
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Quiz Token System")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+os.makedirs("static", exist_ok=True)
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 # -----------------------
@@ -67,6 +81,12 @@ def create_team(team: TeamCreate, db: Session = Depends(get_db)):
 def get_all_teams(db: Session = Depends(get_db)):
     teams = db.query(models.Team).all()
     return teams
+
+
+@app.get("/audience")
+def get_all_audience(db: Session = Depends(get_db)):
+    audience = db.query(models.Audience).all()
+    return audience
 
 
 # -----------------------
